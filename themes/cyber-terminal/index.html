@@ -1,5 +1,5 @@
-﻿<!DOCTYPE html>
-<html lang="{{ lang }}"{% if color_scheme == "light" %} class="scheme-light"{% elsif color_scheme == "dark" %} class="scheme-dark"{% endif %}>
+<!DOCTYPE html>
+<html lang="{{ lang }}"{% if color_scheme == "light" %} class="scheme-light"{% elsif color_scheme == "dark" %} class="scheme-dark"{% endif %} data-config-scheme="{{ color_scheme }}">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
@@ -13,7 +13,7 @@
 
   <meta property="og:title" content="{{ title }}" />
   <meta name="author" content="{{ name }}" />
-  <meta property="og:locale" content="en" />
+  <meta property="og:locale" content="{{ lang }}" />
   <meta name="description" content="{{ tagline }}" />
   <meta property="og:description" content="{{ tagline }}" />
   <meta property="og:site_name" content="{{ title }}" />
@@ -38,20 +38,26 @@
 </head>
 <body>
   <div class="terminal-grid" aria-hidden="true"></div>
-  <main class="shell" aria-label="Cyber terminal profile">
+  <main class="shell" aria-label="Cyber terminal profile" data-i18n-attr="aria-label:shellLabel">
     <section class="terminal-panel">
-      <div class="terminal-bar" aria-hidden="true">
-        <span class="status-dot status-danger"></span>
-        <span class="status-dot status-warning"></span>
-        <span class="status-dot status-success"></span>
+      <div class="terminal-bar">
+        <div class="terminal-window-controls" aria-hidden="true">
+          <span class="status-dot status-danger"></span>
+          <span class="status-dot status-warning"></span>
+          <span class="status-dot status-success"></span>
+        </div>
         <span class="terminal-title">secure-link://{{ name }}</span>
+        <div class="terminal-actions" aria-label="Display controls" data-i18n-attr="aria-label:displayControls">
+          <button type="button" class="terminal-toggle" id="theme-toggle" data-i18n="themeToggle" aria-label="Switch color theme" data-i18n-attr="aria-label:themeToggleAria">Theme: Auto</button>
+          <button type="button" class="terminal-toggle" id="language-toggle" data-i18n="languageToggle" aria-label="Switch language" data-i18n-attr="aria-label:languageToggleAria">Language: EN</button>
+        </div>
       </div>
 
       <div class="terminal-body">
         <header class="profile">
-          <p class="eyebrow"><span class="prompt">$</span> identity --resolve</p>
+          <p class="eyebrow"><span class="prompt">$</span> <span data-i18n="identityCommand">identity --resolve</span></p>
           <div class="profile-row">
-            <img src="{{ avatar }}" alt="Profile Picture" class="profile-pic" />
+            <img src="{{ avatar }}" alt="Profile picture" data-i18n-attr="alt:profileImageAlt" class="profile-pic" />
             <div class="profile-copy">
               <h1 class="name">{{ name }}<span class="cursor" aria-hidden="true"></span></h1>
               <p class="description">{{ tagline }}</p>
@@ -59,40 +65,40 @@
           </div>
         </header>
 
-        <section class="dashboard" aria-label="Profile status">
+        <section class="dashboard" aria-label="Profile status" data-i18n-attr="aria-label:profileStatus">
           <div class="metric-card">
-            <span class="metric-label">Links</span>
+            <span class="metric-label" data-i18n="linksLabel">Links</span>
             <span class="metric-value">{{ links.size }}</span>
           </div>
           <div class="metric-card">
-            <span class="metric-label">Socials</span>
+            <span class="metric-label" data-i18n="socialsLabel">Socials</span>
             <span class="metric-value">{{ socials.size }}</span>
           </div>
           <div class="metric-card">
-            <span class="metric-label">Mode</span>
-            <span class="metric-value">Online</span>
+            <span class="metric-label" data-i18n="modeLabel">Mode</span>
+            <span class="metric-value" data-i18n="modeValue">Online</span>
           </div>
         </section>
 
-        <nav class="links" aria-label="Primary links">
-          <p class="section-command"><span class="prompt">$</span> open ./links</p>
+        <nav class="links" aria-label="Primary links" data-i18n-attr="aria-label:primaryLinks">
+          <p class="section-command"><span class="prompt">$</span> <span data-i18n="linksCommand">open ./links</span></p>
           {% for item in links %}
             {% assign link = item.link %}
             <a href="{{ link.url }}" target="{{ link.target }}" class="link-button{% if link.latest %} link-latest{% endif %}" alt="{{ link.alt }}" title="{{ link.title }}">
               <span class="link-index" aria-hidden="true">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>
               <span class="link-icon" aria-hidden="true"><i class="{{ link.icon }}"></i></span>
               <span class="link-text">{{ link.text }}</span>
-              {% if link.latest %}<span class="link-latest-badge" aria-hidden="true">LATEST</span>{% endif %}
+              {% if link.latest %}<span class="link-latest-badge" aria-hidden="true" data-i18n="latestBadge">LATEST</span>{% endif %}
             </a>
           {% endfor %}
         </nav>
 
-        <section class="button-container" aria-label="Social links">
-          <p class="section-command"><span class="prompt">$</span> handshake ./socials</p>
+        <section class="button-container" aria-label="Social links" data-i18n-attr="aria-label:socialLinks">
+          <p class="section-command"><span class="prompt">$</span> <span data-i18n="socialsCommand">handshake ./socials</span></p>
           <div class="button-group">
             {% for item in socials %}
               {% assign social = item.social %}
-              <a href="{{ social.url }}" title="{{ social.title }}" target="{{ social.target }}" class="icon-button" alt="{{ social.alt }}">
+              <a href="{{ social.url }}" title="{{ social.title }}" target="{{ social.target }}" class="icon-button" aria-label="{{ social.alt }}">
                 <i class="{{ social.icon }}"></i>
               </a>
             {% endfor %}
@@ -100,7 +106,7 @@
         </section>
 
         <footer class="footer">
-          <p class="section-command"><span class="prompt">$</span> tail ./footer</p>
+          <p class="section-command"><span class="prompt">$</span> <span data-i18n="footerCommand">tail ./footer</span></p>
           <div class="footer-copy">{{ footer }}</div>
           <div class="copyright">{{ copyright }}</div>
         </footer>
@@ -121,4 +127,3 @@
   <script src="./scripts.js?v={{ last_modified_at }}"></script>
 </body>
 </html>
-
