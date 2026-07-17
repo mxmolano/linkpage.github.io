@@ -1,0 +1,124 @@
+﻿<!DOCTYPE html>
+<html lang="{{ lang }}"{% if color_scheme == "light" %} class="scheme-light"{% elsif color_scheme == "dark" %} class="scheme-dark"{% endif %}>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>{{ title }}</title>
+
+  <meta name="last-modified" content="{{ last_modified_at }}">
+  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#F7FAFF">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#05070D">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+  <meta property="og:title" content="{{ title }}" />
+  <meta name="author" content="{{ name }}" />
+  <meta property="og:locale" content="en" />
+  <meta name="description" content="{{ tagline }}" />
+  <meta property="og:description" content="{{ tagline }}" />
+  <meta property="og:site_name" content="{{ title }}" />
+  <meta property="og:image" content="{{ avatar }}" />
+  <meta property="og:type" content="article" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta property="twitter:image" content="{{ avatar }}" />
+  <meta property="twitter:title" content="{{ title }}" />
+
+  <link rel="apple-touch-icon" sizes="180x180" href="./images/favicons/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="./images/favicons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="./images/favicons/favicon-16x16.png">
+  <link rel="manifest" href="./images/favicons/site.webmanifest">
+  <link rel="shortcut icon" href="./images/favicons/favicon.ico">
+  <meta name="apple-mobile-web-app-title" content="{{ title }}">
+  <meta name="application-name" content="{{ title }}">
+  <meta name="msapplication-TileColor" content="#111827">
+  <meta name="msapplication-config" content="./images/favicons/browserconfig.xml">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+  <link rel="stylesheet" href="./styles.css?v={{ last_modified_at }}" />
+</head>
+<body>
+  <div class="terminal-grid" aria-hidden="true"></div>
+  <main class="shell" aria-label="Cyber terminal profile">
+    <section class="terminal-panel">
+      <div class="terminal-bar" aria-hidden="true">
+        <span class="status-dot status-danger"></span>
+        <span class="status-dot status-warning"></span>
+        <span class="status-dot status-success"></span>
+        <span class="terminal-title">secure-link://{{ name }}</span>
+      </div>
+
+      <div class="terminal-body">
+        <header class="profile">
+          <p class="eyebrow"><span class="prompt">$</span> identity --resolve</p>
+          <div class="profile-row">
+            <img src="{{ avatar }}" alt="Profile Picture" class="profile-pic" />
+            <div class="profile-copy">
+              <h1 class="name">{{ name }}<span class="cursor" aria-hidden="true"></span></h1>
+              <p class="description">{{ tagline }}</p>
+            </div>
+          </div>
+        </header>
+
+        <section class="dashboard" aria-label="Profile status">
+          <div class="metric-card">
+            <span class="metric-label">Links</span>
+            <span class="metric-value">{{ links.size }}</span>
+          </div>
+          <div class="metric-card">
+            <span class="metric-label">Socials</span>
+            <span class="metric-value">{{ socials.size }}</span>
+          </div>
+          <div class="metric-card">
+            <span class="metric-label">Mode</span>
+            <span class="metric-value">Online</span>
+          </div>
+        </section>
+
+        <nav class="links" aria-label="Primary links">
+          <p class="section-command"><span class="prompt">$</span> open ./links</p>
+          {% for item in links %}
+            {% assign link = item.link %}
+            <a href="{{ link.url }}" target="{{ link.target }}" class="link-button{% if link.latest %} link-latest{% endif %}" alt="{{ link.alt }}" title="{{ link.title }}">
+              <span class="link-index" aria-hidden="true">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>
+              <span class="link-icon" aria-hidden="true"><i class="{{ link.icon }}"></i></span>
+              <span class="link-text">{{ link.text }}</span>
+              {% if link.latest %}<span class="link-latest-badge" aria-hidden="true">LATEST</span>{% endif %}
+            </a>
+          {% endfor %}
+        </nav>
+
+        <section class="button-container" aria-label="Social links">
+          <p class="section-command"><span class="prompt">$</span> handshake ./socials</p>
+          <div class="button-group">
+            {% for item in socials %}
+              {% assign social = item.social %}
+              <a href="{{ social.url }}" title="{{ social.title }}" target="{{ social.target }}" class="icon-button" alt="{{ social.alt }}">
+                <i class="{{ social.icon }}"></i>
+              </a>
+            {% endfor %}
+          </div>
+        </section>
+
+        <footer class="footer">
+          <p class="section-command"><span class="prompt">$</span> tail ./footer</p>
+          <div class="footer-copy">{{ footer }}</div>
+          <div class="copyright">{{ copyright }}</div>
+        </footer>
+      </div>
+    </section>
+  </main>
+
+  {% if google_analytics_id %}
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{ google_analytics_id }}"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', '{{ google_analytics_id }}');
+    </script>
+  {% endif %}
+  <script src="./scripts.js?v={{ last_modified_at }}"></script>
+</body>
+</html>
+
